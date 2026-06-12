@@ -1,0 +1,17 @@
+{
+  "repo": "tarot_card_aesthetic",
+  "type": "style_reference",
+  "aesthetic_category": "esoteric_symbolic",
+  "subcategories": ["divination", "symbolism", "illustration", "print_tradition"],
+  "color_palettes": {
+    "RIDER_WAITE": ["#FFF8E7", "#FFD700", "#8B0000", "#191970", "#228B22"],
+    "MARSEILLE_FLAT": ["#FF4500", "#FFD700", "#000080", "#F5DEB3"],
+    "THOTH_JEWEL": ["#1C1C1C", "#DAA520", "#8B008B", "#00008B"],
+    "DARK_ORACLE": ["#0D0D0D", "#C0A870", "#8B1C1C"]
+  },
+  "regimes": ["RIDER_WAITE_REVIVAL", "MARSEILLE_FLAT", "THOTH_AETHYR", "INDIE_MINIMAL", "DARK_ORACLE"],
+  "pipeline_role": "context_source",
+  "compatible_with": ["sacred_geometry", "symbolist_style", "tibetan_thangka_style", "gematria_resonance", "i_ching_fields"],
+  "reposcripter2": true,
+  "shaderforge": true
+}

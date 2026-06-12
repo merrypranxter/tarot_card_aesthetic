@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tarot_card_aesthetic — Shader Viewer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #111; color: #ddd; font-family: 'Georgia', serif; display: flex; height: 100vh; overflow: hidden; }
+
+    #canvas-wrap { flex: 1; position: relative; }
+    canvas { display: block; width: 100%; height: 100%; }
+
+    #panel {
+      width: 280px; flex-shrink: 0;
+      background: #1a1a1a; border-left: 1px solid #333;
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    #panel-header {
+      padding: 16px; border-bottom: 1px solid #333;
+    }
+    #panel-header h1 { font-size: 13px; letter-spacing: 0.12em; color: #c0a870; text-transform: uppercase; }
+    #panel-header p { font-size: 11px; color: #666; margin-top: 4px; font-style: italic; }
+
+    #panel-body { flex: 1; overflow-y: auto; padding: 12px 16px; }
+    #panel-body::-webkit-scrollbar { width: 4px; }
+    #panel-body::-webkit-scrollbar-track { background: #111; }
+    #panel-body::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
+
+    .section-label {
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #666; margin: 14px 0 8px; border-bottom: 1px solid #222; padding-bottom: 4px;
+    }
+
+    select {
+      width: 100%; background: #111; color: #c0a870; border: 1px solid #444;
+      padding: 7px 10px; font-size: 12px; border-radius: 3px; outline: none;
+      font-family: 'Georgia', serif; cursor: pointer;
+    }
+    select:focus { border-color: #c0a870; }
+
+    .shader-desc {
+      font-size: 11px; color: #888; margin-top: 8px; font-style: italic; line-height: 1.5;
+    }
+
+    .control { margin-bottom: 12px; }
+    .control label {
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-size: 11px; color: #aaa; margin-bottom: 4px;
+    }
+    .control label span { color: #c0a870; font-size: 10px; font-family: monospace; }
+    input[type=range] {
+      -webkit-appearance: none; width: 100%; height: 3px;
+      background: #333; border-radius: 2px; outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 12px; height: 12px;
+      background: #c0a870; border-radius: 50%; cursor: pointer;
+    }
+    input[type=range]:focus::-webkit-slider-thumb { background: #ffd700; }
+
+    .color-row { display: flex; gap: 6px; align-items: center; }
+    .color-row input[type=range] { flex: 1; }
+    .color-swatch {
+      width: 20px; height: 20px; border-radius: 3px; border: 1px solid #444; flex-shrink: 0;
+    }
+
+    #palette-hint {
+      font-size: 10px; color: #555; margin-top: 8px; line-height: 1.6;
+      font-family: monospace;
+    }
+
+    #fps { font-size: 10px; color: #444; text-align: right; padding: 8px 16px; border-top: 1px solid #222; }
+  </style>
+</head>
+<body>
+  <div id="canvas-wrap">
+    <canvas id="c"></canvas>
+  </div>
+
+  <div id="panel">
+    <div id="panel-header">
+      <h1>tarot_card_aesthetic</h1>
+      <p>the card knows what it is. you are the variable.</p>
+    </div>
+
+    <div id="panel-body">
+      <div class="section-label">Shader</div>
+      <select id="shader-select"></select>
+      <div class="shader-desc" id="shader-desc"></div>
+
+      <div class="section-label">Border &amp; Line</div>
+      <div class="control">
+        <label>Border weight <span id="bw-val">0.5</span></label>
+        <input type="range" id="border_weight" min="0" max="1" step="0.01" value="0.5">
+      </div>
+      <div class="control">
+        <label>Gold intensity <span id="gi-val">0.9</span></label>
+        <input type="range" id="gold_intensity" min="0" max="1" step="0.01" value="0.9">
+      </div>
+      <div class="control">
+        <label>Outline weight <span id="ow-val">0.5</span></label>
+        <input type="range" id="outline_weight" min="0" max="1" step="0.01" value="0.5">
+      </div>
+
+      <div class="section-label">Sky Color (RGB)</div>
+      <div class="control">
+        <label>R <span id="sky-r-val">1.00</span></label>
+        <div class="color-row">
+          <input type="range" id="sky_r" min="0" max="1" step="0.01" value="1.0">
+        </div>
+      </div>
+      <div class="control">
+        <label>G <span id="sky-g-val">0.85</span></label>
+        <input type="range" id="sky_g" min="0" max="1" step="0.01" value="0.85">
+      </div>
+      <div class="control">
+        <label>B <span id="sky-b-val">0.00</span></label>
+        <input type="range" id="sky_b" min="0" max="1" step="0.01" value="0.0">
+      </div>
+      <div id="sky-swatch" class="color-swatch" style="width:100%; height:16px; border-radius:3px; border:1px solid #444; margin-top:-4px;"></div>
+
+      <div class="section-label">Ground Color (RGB)</div>
+      <div class="control">
+        <label>R <span id="gnd-r-val">1.00</span></label>
+        <input type="range" id="gnd_r" min="0" max="1" step="0.01" value="1.0">
+      </div>
+      <div class="control">
+        <label>G <span id="gnd-g-val">0.97</span></label>
+        <input type="range" id="gnd_g" min="0" max="1" step="0.01" value="0.97">
+      </div>
+      <div class="control">
+        <label>B <span id="gnd-b-val">0.91</span></label>
+        <input type="range" id="gnd_b" min="0" max="1" step="0.01" value="0.91">
+      </div>
+      <div id="gnd-swatch" class="color-swatch" style="width:100%; height:16px; border-radius:3px; border:1px solid #444; margin-top:-4px;"></div>
+
+      <div class="section-label">Composition</div>
+      <div class="control">
+        <label>Symbol density <span id="sd-val">0.7</span></label>
+        <input type="range" id="symbol_density" min="0" max="1" step="0.01" value="0.7">
+      </div>
+      <div class="control">
+        <label>Arcana number (0–21) <span id="an-val">0</span></label>
+        <input type="range" id="arcana_number" min="0" max="21" step="1" value="0">
+      </div>
+
+      <div class="section-label">Sky Presets</div>
+      <div id="palette-hint">
+        Yellow  → day / solar will<br>
+        Blue    → water / unconscious<br>
+        Grey    → storm / challenge<br>
+        Black   → void / deep unknown<br>
+        Orange  → dawn / transition
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
+        <button class="sky-preset" data-r="1.0" data-g="0.85" data-b="0.0" style="background:#d8a800;">Day</button>
+        <button class="sky-preset" data-r="0.1" data-g="0.25" data-b="0.7" style="background:#1a40b2;">Water</button>
+        <button class="sky-preset" data-r="0.45" data-g="0.45" data-b="0.5" style="background:#737380;">Storm</button>
+        <button class="sky-preset" data-r="0.05" data-g="0.05" data-b="0.1" style="background:#0d0d1a;">Void</button>
+        <button class="sky-preset" data-r="0.9" data-g="0.45" data-b="0.1" style="background:#e57219;">Dawn</button>
+      </div>
+    </div>
+
+    <div id="fps">— fps</div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+
+  <style>
+    .sky-preset {
+      border: none; color: #fff; font-size: 10px; padding: 4px 8px; border-radius: 3px;
+      cursor: pointer; letter-spacing: 0.08em; font-family: 'Georgia', serif;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
+    .sky-preset:hover { filter: brightness(1.2); }
+  </style>
+</body>
+</html>
