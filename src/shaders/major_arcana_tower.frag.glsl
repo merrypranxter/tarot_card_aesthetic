@@ -245,11 +245,11 @@ void main(){
 
     // ── 22 Yod letters / falling flames (scattered) ──────────────────────────
     {
-        float cnt = u_symbol_density * 18.0 + 4.0;
-        for(float yi=0.0; yi<22.0; yi++){
+        int cnt = int(ceil(u_symbol_density * 18.0 + 4.0));
+        for(int yi = 0; yi < 22; yi++){
             if(yi >= cnt) break;
-            float h = hash1(yi*7.1);
-            float h2 = hash1(yi*13.3+1.5);
+            float h = hash1(float(yi) * 7.1);
+            float h2 = hash1(float(yi) * 13.3 + 1.5);
             vec2 yp = cuv - vec2(0.10 + h*0.80, 0.25 + h2*0.62);
             float y_glyph = yod(yp, 0.010);
             img = mix(img, mix(GOLD, AMBER, h), y_glyph * u_gold_intensity * 0.8);
