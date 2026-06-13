@@ -1,0 +1,30 @@
+REPO: tarot_card_aesthetic
+PURPOSE: Tarot visual grammar — card format, symbolic vocabulary, from Rider-Waite through indie decks
+STACK: Three.js + WebGL2 + GLSL + Vite
+
+CARD FORMAT:
+- Aspect ratio: 1:1.73 (portrait)
+- Zones: outer_border / inner_margin / image_field (fills ~80%) / title_bar (bottom 10%)
+- Number: top center, Roman numeral or Arabic
+- Title: bottom, serif or ornate display font, centered
+
+CORE MATH:
+- Border pattern: SDF distance fields from card edges at multiple thresholds
+- Gold shimmer: thin-film iridescence, hue_shift(dot(N,V)) * gold_intensity
+- Star field: Poisson disk stars with 8-point cross flare
+- Pip geometry: standard suit arrangements (1-10) packed into image field
+- Symbol scatter: random placement with minimum separation constraint
+- Sky gradient: vertical gradient in symbolic sky color
+
+PALETTES:
+- RIDER_WAITE: #FFF8E7, #FFD700, #8B0000, #191970, #228B22
+- MARSEILLE_FLAT: #FF4500, #FFD700, #000080, #F5DEB3
+- THOTH_JEWEL: #1C1C1C, #DAA520, #8B008B, #00008B
+- DARK_ORACLE: #0D0D0D, #C0A870, #8B1C1C
+
+REGIMES:
+- RIDER_WAITE_REVIVAL: cream ground, heavy outline, gold accents, symbolic skies
+- MARSEILLE_FLAT: geometric pips, flat color, decorative not illustrative
+- THOTH_AETHYR: jewel colors on black, geometric/astrological abstraction
+- INDIE_MINIMAL: white ground, hairline art, one accent color, plants+animals
+- DARK_ORACLE: black ground, gold/aged-red marks, archaic urgency

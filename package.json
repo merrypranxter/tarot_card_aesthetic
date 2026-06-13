@@ -1,0 +1,26 @@
+{
+  "name": "tarot_card_aesthetic",
+  "version": "0.1.0",
+  "description": "Generative art style reference for tarot_card_aesthetic",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "keywords": [
+    "generative-art",
+    "shader",
+    "webgl",
+    "glsl",
+    "style-reference"
+  ],
+  "author": "merrypranxter",
+  "license": "MIT"
+}
