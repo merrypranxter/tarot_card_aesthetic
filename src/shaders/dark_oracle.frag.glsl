@@ -82,7 +82,7 @@ float archCross(vec2 p, float size){
 }
 
 // Eye glyph (almond + pupil + iris)
-float eyeGlyph(vec2 p, float w, float h_r){
+float eyeGlyph(vec2 p, float w){
     // Almond outline: intersection of two circles
     float c1 = sdCircle(p - vec2(-w*0.5, 0.0), w * 0.7);
     float c2 = sdCircle(p - vec2( w*0.5, 0.0), w * 0.7);
@@ -179,7 +179,7 @@ void main(){
 
     // ── Eye glyph (centre) ────────────────────────────────────────────────────
     {
-        float ey = eyeGlyph(cent, 0.09, 0.04);
+        float ey = eyeGlyph(cent, 0.09);
         col = mix(col, GOLD, mask * image_field * ey * u_gold_intensity);
         // Pupil fill in dark red
         float pupil = smoothstep(0.022, 0.0, length(cent));
@@ -195,12 +195,13 @@ void main(){
     // ── Drip marks ───────────────────────────────────────────────────────────
     {
         float cnt = u_symbol_density * 6.0;
-        for(float di = 0.0; di < 6.0; di++){
-            if(di >= cnt) break;
-            float h = hash1(di * 7.3 + 0.5);
+        for(int di = 0; di < 6; di++){
+            if(float(di) >= cnt) break;
+            float fdi = float(di);
+            float h = hash1(fdi * 7.3 + 0.5);
             float x = 0.12 + h * 0.76;
-            float len = 0.04 + hash1(di * 13.1) * 0.06;
-            float y_start = 0.75 + hash1(di * 19.7) * 0.06;
+            float len = 0.04 + hash1(fdi * 13.1) * 0.06;
+            float y_start = 0.75 + hash1(fdi * 19.7) * 0.06;
             float d = drip(cuv, x, y_start, len);
             col = mix(col, DRED * 0.85, mask * image_field * d * 0.8);
         }
@@ -209,12 +210,13 @@ void main(){
     // ── Rune scratch lines (angled archaic marks) ─────────────────────────────
     {
         float cnt = u_symbol_density * 5.0;
-        for(float ri = 0.0; ri < 5.0; ri++){
-            if(ri >= cnt) break;
-            float h = hash1(ri * 11.1 + 2.5);
-            float h2 = hash1(ri * 17.3 + 5.1);
+        for(int ri = 0; ri < 5; ri++){
+            if(float(ri) >= cnt) break;
+            float fri = float(ri);
+            float h = hash1(fri * 11.1 + 2.5);
+            float h2 = hash1(fri * 17.3 + 5.1);
             vec2 rc = vec2(0.15 + h * 0.70, 0.20 + h2 * 0.60);
-            float angle = hash1(ri * 23.7) * 3.14159;
+            float angle = hash1(fri * 23.7) * 3.14159;
             vec2 d0 = vec2(cos(angle), sin(angle)) * 0.035;
             float rune = roughStroke(cuv, rc - d0, rc + d0, 0.004, 25.0);
             col = mix(col, EMBER, mask * image_field * rune * 0.55);

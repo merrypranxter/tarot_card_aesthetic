@@ -175,10 +175,11 @@ void main(){
     // ── Symbol scatter (pentacle wheels) ─────────────────────────────────────
     {
         float cnt = floor(u_symbol_density * 10.0 + 1.0);
-        for(float si = 0.0; si < 10.0; si++){
-            if(si >= cnt) break;
-            float h = hash1(si * 9.3);
-            float h2 = hash1(si * 17.1 + 3.0);
+        for(int si = 0; si < 10; si++){
+            if(float(si) >= cnt) break;
+            float fsi = float(si);
+            float h = hash1(fsi * 9.3);
+            float h2 = hash1(fsi * 17.1 + 3.0);
             vec2 sp = vec2(0.12 + h * 0.76, 0.14 + h2 * 0.68);
             float dist = length(cuv - sp);
             if(dist < 0.06){

@@ -87,7 +87,6 @@ function makeUniforms(s) {
   };
 }
 
-let currentIndex = 0;
 let material = new THREE.ShaderMaterial({
   vertexShader: VERT,
   fragmentShader: SHADERS[0].glsl,
@@ -157,7 +156,6 @@ function updateSwatches() {
 }
 
 function switchShader(idx) {
-  currentIndex = idx;
   const s = SHADERS[idx];
   scene.remove(mesh);
   material.dispose();

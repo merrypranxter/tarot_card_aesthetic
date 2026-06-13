@@ -98,7 +98,6 @@ void main(){
     float edge  = min(min(cuv.x, 1.0-cuv.x), min(cuv.y, 1.0-cuv.y));
     float in_outer  = step(edge, bw);
     // No thick border — just hairline. So in_outer is only 1px equivalent.
-    float border_line = step(edge, bw) - step(edge, bw - 0.004);
     float in_inner  = 1.0 - in_outer;
 
     float title_bar   = step(cuv.y, 0.10) * in_inner;
@@ -170,10 +169,11 @@ void main(){
     // Small accent dots (dewdrops / seeds)
     {
         float cnt = u_symbol_density * 7.0;
-        for(float si = 0.0; si < 7.0; si++){
-            if(si >= cnt) break;
-            float h = hash1(si * 8.1);
-            float h2 = hash1(si * 14.7 + 1.1);
+        for(int si = 0; si < 7; si++){
+            if(float(si) >= cnt) break;
+            float fsi = float(si);
+            float h = hash1(fsi * 8.1);
+            float h2 = hash1(fsi * 14.7 + 1.1);
             vec2 sp = vec2(0.25 + h * 0.50, 0.22 + h2 * 0.44);
             float d = dot_(cuv - sp, 0.007);
             col = mix(col, ACCENT, mask * image_field * d * 0.85);

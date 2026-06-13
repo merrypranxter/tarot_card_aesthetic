@@ -195,8 +195,6 @@ void main(){
     }
 
     // Card centre in image-field space
-    float ify = (cuv.y - 0.11) / 0.80;
-    vec2  img_c = vec2(0.5, ify * 0.80 + 0.11); // ~0.5
     vec2  cent = cuv - vec2(0.5, 0.50);
 
     // ── Outer planetary ring ──────────────────────────────────────────────────
@@ -243,10 +241,11 @@ void main(){
     // ── Scattered symbol density layer: small crosses ─────────────────────────
     {
         float cnt = u_symbol_density * 8.0;
-        for(float si = 0.0; si < 8.0; si++){
-            if(si >= cnt) break;
-            float h = hash1(si * 11.7);
-            float h2 = hash1(si * 19.3 + 2.2);
+        for(int si = 0; si < 8; si++){
+            if(float(si) >= cnt) break;
+            float fsi = float(si);
+            float h = hash1(fsi * 11.7);
+            float h2 = hash1(fsi * 19.3 + 2.2);
             vec2 sp = vec2(0.08 + h * 0.84, 0.13 + h2 * 0.74);
             vec2 pp = cuv - sp;
             float cross_h = smoothstep(0.003, 0.0, sdBox(pp, vec2(0.018, 0.004)));

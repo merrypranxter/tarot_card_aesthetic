@@ -269,10 +269,11 @@ void main(){
     // ── Yod drops (blessings raining) ────────────────────────────────────────
     {
         float cnt = u_symbol_density * 20.0 + 5.0;
-        for(float yi=0.0; yi<25.0; yi++){
-            if(yi >= cnt) break;
-            float h = hash1(yi*6.7);
-            float h2 = hash1(yi*11.3+2.0);
+        for(int yi = 0; yi < 25; yi++){
+            if(float(yi) >= cnt) break;
+            float fyi = float(yi);
+            float h = hash1(fyi * 6.7);
+            float h2 = hash1(fyi * 11.3 + 2.0);
             vec2 yp = cuv - vec2(0.12 + h*0.76, 0.30 + h2*0.50);
             float drop = smoothstep(0.009,0.0, sdCircle(yp, 0.008))
                        + smoothstep(0.005,-0.001, sdBox(yp-vec2(0.0,-0.010), vec2(0.004,0.010)));
